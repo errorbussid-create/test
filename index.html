@@ -1,462 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Productivity Analytics Engine</title>
-    <!-- Tailwind CSS for production-grade styling -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Chart.js for visualization -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tracker</title>
+<meta name="description" content="A personal log for running, study sessions, and content performance.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  :root{
+    --bg:#0a0c11;
+    --surface:#12151c;
+    --surface-2:#171b24;
+    --border:#232838;
+    --text:#e7e9ee;
+    --muted:#838ba1;
+    --muted-2:#5b6378;
+    --teal:#2dd4bf;
+    --teal-dim:#0f3d38;
+    --rose:#fb7185;
+    --rose-dim:#3d1722;
+    --blue:#5b8def;
+    --violet:#a78bfa;
+    --orange:#f97316;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(45,212,191,0.06), transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, rgba(167,139,250,0.05), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,.display{font-family:'Space Grotesk', sans-serif;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:40px 24px 80px;}
+
+  /* Header */
+  header{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:20px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:28px; margin-bottom:28px;
+  }
+  .brand-eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:8px;
+  }
+  .brand-dot{width:7px;height:7px;border-radius:50%;background:var(--teal); box-shadow:0 0 0 4px var(--teal-dim);}
+  header h1{font-size:26px; font-weight:700; margin:0; letter-spacing:-0.01em;}
+  .header-date{font-size:13px; color:var(--muted-2); margin-top:4px;}
+
+  .tabs{display:inline-flex; background:var(--surface); border:1px solid var(--border); padding:4px; border-radius:11px; gap:2px; flex-wrap: wrap;}
+  .tab{
+    border:none; background:transparent; color:var(--muted);
+    font:inherit; font-weight:600; font-size:13px; letter-spacing:.01em;
+    padding:9px 18px; border-radius:8px; cursor:pointer; transition:.15s;
+  }
+  .tab:hover{color:var(--text);}
+  .tab.active.tab-run{background:linear-gradient(135deg,var(--teal),#15a397); color:#04211d;}
+  .tab.active.tab-java{background:linear-gradient(135deg,var(--blue),#3b6ecf); color:#0a1833;}
+  .tab.active.tab-aptitude{background:linear-gradient(135deg,var(--violet),#8b5cf6); color:#1e0a38;}
+  .tab.active.tab-reels{background:linear-gradient(135deg,var(--rose),#e94f6b); color:#330a13;}
+
+  /* Stat strip */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px;}
+  .stat{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px;}
+  .stat-label{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted-2); margin-bottom:8px;}
+  .stat-value{font-size:22px; font-weight:700; font-family:'Space Grotesk',sans-serif;}
+  .stat-value.teal{color:var(--teal);} 
+  .stat-value.blue{color:var(--blue);}
+  .stat-value.violet{color:var(--violet);}
+  .stat-value.rose{color:var(--rose);}
+
+  /* Layout */
+  .grid{display:grid; grid-template-columns:340px 1fr; gap:24px; align-items:start;}
+  @media (max-width:900px){.grid{grid-template-columns:1fr;} .stats{grid-template-columns:repeat(2,1fr);}}
+
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px;}
+  .card + .card{margin-top:24px;}
+  .card-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;}
+  .card-title{font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--text);}
+  .badge{font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; padding:3px 9px; border-radius:6px; font-family:'JetBrains Mono',monospace;}
+  .badge.teal{background:var(--teal-dim); color:var(--teal); border:1px solid #155249;}
+  .badge.blue{background:rgba(91,141,239,0.1); color:var(--blue); border:1px solid #23458c;}
+  .badge.violet{background:rgba(167,139,250,0.1); color:var(--violet); border:1px solid #5a3ba8;}
+  .badge.rose{background:var(--rose-dim); color:var(--rose); border:1px solid #5c2230;}
+
+  label{display:block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:7px;}
+  .field{margin-bottom:18px;}
+  input, select, textarea{
+    width:100%; background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:9px; padding:10px 12px; font:inherit; font-size:13.5px; outline:none; transition:.15s;
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--teal);}
+  textarea{resize:none;}
+  select{cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23838ba1'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center;}
+
+  .time-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;}
+  
+  .conditional-field{display:none;}
+  .conditional-field.show{display:block;}
+
+  .submit-btn{
+    width:100%; border:none; cursor:pointer; padding:13px; border-radius:10px;
+    font:inherit; font-weight:700; font-size:12.5px; text-transform:uppercase; letter-spacing:.07em;
+    background:linear-gradient(135deg,var(--teal),#15a397); color:#04211d;
+    transition:filter .15s; margin-top:4px;
+  }
+  .submit-btn:hover{filter:brightness(1.08);}
+  .submit-btn.java-theme{background:linear-gradient(135deg,var(--blue),#3b6ecf); color:#0a1833;}
+  .submit-btn.aptitude-theme{background:linear-gradient(135deg,var(--violet),#8b5cf6); color:#1e0a38;}
+  .submit-btn.reels-theme{background:linear-gradient(135deg,var(--rose),#e94f6b); color:#330a13;}
+
+  .chart-box{position:relative; height:230px; width:100%;}
+
+  /* Table */
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  thead th{
+    text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--muted-2); font-weight:600; padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:13px 0; border-bottom:1px solid #1b1f29; color:var(--text); vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  .pill{font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; padding:3px 8px; border-radius:6px; background:var(--surface-2); border:1px solid var(--border); color:var(--muted); font-family:'JetBrains Mono',monospace;}
+  .topic-name{font-weight:600; display:block;}
+  .topic-note{font-size:11.5px; color:var(--muted-2); margin-top:3px; font-style:italic; max-width:340px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .timecol{font-family:'JetBrains Mono',monospace; color:var(--muted); font-size:11.5px;}
+  
+  .return-metric{font-weight:700; font-family:'JetBrains Mono',monospace;}
+  .return-metric.run{color:var(--teal);}
+  .return-metric.java{color:var(--blue);}
+  .return-metric.aptitude{color:var(--violet);}
+  .return-metric.reels{color:var(--rose);}
+  
+  .view-wrapper { display: flex; align-items: center; gap: 8px; justify-content: flex-end; flex-wrap: wrap;}
+  .mature-tag{font-size:9px; font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.06em; background:rgba(45,212,191,0.08); color:var(--teal); border:1px solid #155249; padding:2px 6px; border-radius:5px; text-align:center;}
+  .empty-row td{text-align:center; color:var(--muted-2); padding:36px 0; font-size:13px;}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-teal-500 selection:text-slate-900">
+<body>
 
-    <div class="max-w-7xl mx-auto px-6 py-10">
-        <!-- Enterprise Header -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 mb-10 gap-6">
-            <div>
-                <div class="flex items-center gap-2">
-                    <span class="h-2.5 w-2.5 rounded-full bg-teal-400 animate-pulse"></span>
-                    <h1 class="text-2xl font-black tracking-wider text-slate-100 uppercase">
-                        PERFORMANCE ANALYSIS SYSTEM
-                    </h1>
-                </div>
-                <p class="text-slate-400 text-xs font-mono uppercase tracking-widest mt-1.5">Core Execution Hub & Analytics Matrix</p>
-            </div>
-            
-            <!-- Strategic Segment Toggles -->
-            <div class="inline-flex bg-slate-900/80 border border-slate-800 p-1 rounded-xl shadow-inner backdrop-blur-sm">
-                <button id="btnMainDash" onclick="switchDashboard('main')" class="px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-md">
-                    💼 Core Tracks
-                </button>
-                <button id="btnReelDash" onclick="switchDashboard('reels')" class="px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white">
-                    📱 Reels Suite
-                </button>
-            </div>
-        </header>
+<div class="wrap">
 
-        <!-- Main Dashboard Workspace -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Left Data Intake Module -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl h-fit">
-                <div class="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
-                    <h2 id="formTitle" class="text-sm font-bold tracking-wider uppercase text-teal-400">Log Execution Metrics</h2>
-                    <span id="formBadge" class="text-[10px] bg-teal-950 text-teal-400 border border-teal-800 px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider">Metrics</span>
-                </div>
-                
-                <form id="analyticsForm" class="space-y-5">
-                    <!-- Target Calendar Log Point -->
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Date Entry</label>
-                        <input type="date" id="activityDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
-                    </div>
+  <header>
+    <div>
+      <div class="brand-eyebrow"><span class="brand-dot"></span> Personal Tracker</div>
+      <h1>Daily Log</h1>
+      <div class="header-date" id="headerDate"></div>
+    </div>
+    <div class="tabs">
+      <button id="btnRunDash" class="tab tab-run active" onclick="switchDashboard('run')">Run</button>
+      <button id="btnJavaDash" class="tab tab-java" onclick="switchDashboard('java')">Java</button>
+      <button id="btnAptDash" class="tab tab-aptitude" onclick="switchDashboard('aptitude')">Aptitude</button>
+      <button id="btnReelDash" class="tab tab-reels" onclick="switchDashboard('reels')">Reels</button>
+    </div>
+  </header>
 
-                    <!-- Functional Track Node -->
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Focus Track</label>
-                        <select id="activityCategory" onchange="toggleFormFields()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors cursor-pointer">
-                            <!-- Injected by Controller -->
-                        </select>
-                    </div>
+  <div class="stats" id="statStrip"></div>
 
-                    <!-- System Focus Subject -->
-                    <div>
-                        <label id="lblTopic" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Task Objective / Topic</label>
-                        <input type="text" id="activityTopic" placeholder="Enter target focus topic..." required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
-                    </div>
+  <div class="grid">
 
-                    <!-- Media Engagement Volume Component -->
-                    <div id="viewsField" class="hidden">
-                        <label class="block text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1.5">Views Metric</label>
-                        <input type="number" id="reelViews" placeholder="e.g., 25400" class="w-full bg-slate-950 border border-rose-950 rounded-xl px-3 py-2.5 text-sm text-rose-200 focus:outline-none focus:border-rose-500 transition-colors">
-                    </div>
+    <!-- Entry form -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title" id="formTitle">New entry</span>
+        <span class="badge teal" id="formBadge">Session</span>
+      </div>
 
-                    <!-- Custom Dropdown Time Selectors -->
-                    <div class="space-y-4">
-                        <!-- Start Sequence Dropdowns -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Sequence Start Window</label>
-                            <div class="grid grid-cols-3 gap-2">
-                                <select id="startHH" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
-                                <select id="startMM" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
-                                <select id="startPeriod" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400">
-                                    <option value="AM">AM</option>
-                                    <option value="PM">PM</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- End Sequence Dropdowns -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Sequence Termination Window</label>
-                            <div class="grid grid-cols-3 gap-2">
-                                <select id="endHH" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
-                                <select id="endMM" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
-                                <select id="endPeriod" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400">
-                                    <option value="AM">AM</option>
-                                    <option value="PM">PM</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Strategy Breakdown Description -->
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Operational Log Notes</label>
-                        <textarea id="activityDesc" rows="3" placeholder="Log critical takeaways or workflow parameters..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors resize-none"></textarea>
-                    </div>
-
-                    <!-- Submission Pipeline Trigger -->
-                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-400 hover:to-cyan-500 text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest transition-all shadow-lg shadow-teal-500/10 cursor-pointer">
-                        Commit Record Set
-                    </button>
-                </form>
-            </div>
-
-            <!-- Visualization Arena & Historical Databases -->
-            <div class="lg:col-span-2 space-y-8">
-                
-                <!-- Main Engineering Track Analytics Module -->
-                <div id="mainDashboardView" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
-                    <h2 class="text-sm font-bold tracking-wider uppercase mb-6 text-cyan-400">Weekly Delta Allocation (Hours)</h2>
-                    <div class="relative h-64 w-full">
-                        <canvas id="mainChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Specialized Media Optimization Engine -->
-                <div id="reelsDashboardView" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl hidden">
-                    <h2 class="text-sm font-bold tracking-wider uppercase mb-6 text-rose-400">Media Traction Velocity Analytics</h2>
-                    <div class="relative h-64 w-full">
-                        <canvas id="reelsChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Structured Log Ledger System -->
-                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
-                    <h2 class="text-sm font-bold tracking-wider uppercase mb-6 text-slate-300">Audited Activity Ledger</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-widest font-mono text-[10px]">
-                                    <th class="pb-3.5">Timeline</th>
-                                    <th class="pb-3.5">System Element</th>
-                                    <th class="pb-3.5">Topic Architecture / Directives</th>
-                                    <th class="pb-3.5">Execution Window</th>
-                                    <th class="pb-3.5 text-right">Net Return</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ledgerTableBody" class="divide-y divide-slate-800/50 text-slate-300">
-                                <!-- Computed Row Nodes injected dynamically here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
+      <form id="analyticsForm">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="activityDate" required>
         </div>
+
+        <div class="field" style="display: none;">
+          <label>Track</label>
+          <select id="activityCategory"></select>
+        </div>
+
+        <div class="field">
+          <label id="lblTopic">Topic</label>
+          <input type="text" id="activityTopic" placeholder="What did you focus on?" required>
+        </div>
+
+        <!-- Conditional Field: Run KM -->
+        <div class="field conditional-field" id="runField">
+          <label>Distance (KM)</label>
+          <input type="number" step="0.01" id="runKm" placeholder="e.g. 5.2">
+        </div>
+
+        <!-- Conditional Field: Study Problems -->
+        <div class="field conditional-field" id="problemsField">
+          <label>Number of Problems</label>
+          <input type="number" id="solvedProblems" placeholder="e.g. 5">
+        </div>
+
+        <!-- Conditional Field: Reel Views -->
+        <div class="field conditional-field" id="viewsField">
+          <label>Views</label>
+          <input type="number" id="reelViews" placeholder="e.g. 25400">
+        </div>
+
+        <!-- Time fields (Hidden for Reels section) -->
+        <div id="timeFieldsContainer">
+          <div class="field">
+            <label>Start time</label>
+            <div class="time-grid">
+              <select id="startHH"></select>
+              <select id="startMM"></select>
+              <select id="startPeriod"><option value="AM">AM</option><option value="PM">PM</option></select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>End time</label>
+            <div class="time-grid">
+              <select id="endHH"></select>
+              <select id="endMM"></select>
+              <select id="endPeriod"><option value="AM">AM</option><option value="PM">PM</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="activityDesc" rows="3" placeholder="Anything worth remembering..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Save entry</button>
+      </form>
     </div>
 
-    <script>
-        // System Launch Setup Configurations
-        document.getElementById('activityDate').value = new Date().toISOString().split('T')[0];
+    <!-- Charts + ledger -->
+    <div>
+      <div class="card" id="chartDashboardView">
+        <div class="card-head">
+          <span class="card-title" id="chartTitle">Performance over time</span>
+        </div>
+        <div class="chart-box"><canvas id="universalChart"></canvas></div>
+      </div>
 
-        let currentMode = 'main'; 
-        let database = JSON.parse(localStorage.getItem('corp_tracker_matrix_db')) || [];
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Activity log</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Track</th>
+                <th>Topic</th>
+                <th id="thTime">Time</th>
+                <th style="text-align:right;" id="thResult">Result</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-        const tracksMap = { main: ['Run', 'Java', 'Aptitude'], reels: ['Reel'] };
+  </div>
+</div>
 
-        // Construct Premium Manual Dropdown Matrix Selection Arrays
-        function buildTimeDropdownSelectors() {
-            const hhSelectors = ['startHH', 'endHH'];
-            const mmSelectors = ['startMM', 'endMM'];
-            
-            hhSelectors.forEach(id => {
-                const el = document.getElementById(id);
-                for(let i = 1; i <= 12; i++) {
-                    let formatted = i < 10 ? '0' + i : i;
-                    el.innerHTML += `<option value="${formatted}">${formatted}</option>`;
-                }
-            });
+<script>
+  // ---- Setup ----
+  document.getElementById('activityDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
-            mmSelectors.forEach(id => {
-                const el = document.getElementById(id);
-                ['00', '15', '30', '45'].forEach(min => {
-                    el.innerHTML += `<option value="${min}">${min}</option>`;
-                });
-            });
-        }
+  let currentMode = 'run'; // Default dashboard view
+  let database = JSON.parse(localStorage.getItem('daily_tracker_db')) || [];
 
-        // Process Dropdown configurations to a standard format
-        function extractTimeFromDropdowns(prefix) {
-            const hh = document.getElementById(`${prefix}HH`).value;
-            const mm = document.getElementById(`${prefix}MM`).value;
-            const period = document.getElementById(`${prefix}Period`).value;
-            return `${hh}:${mm} ${period}`;
-        }
+  const trackConfigs = {
+    run: { label: 'Run', badgeClass: 'teal', btnId: 'btnRunDash', btnClass: 'tab-run', themeClass: '', metricLabel: 'KM' },
+    java: { label: 'Java', badgeClass: 'blue', btnId: 'btnJavaDash', btnClass: 'tab-java', themeClass: 'java-theme', metricLabel: 'Problems' },
+    aptitude: { label: 'Aptitude', badgeClass: 'violet', btnId: 'btnAptDash', btnClass: 'tab-aptitude', themeClass: 'aptitude-theme', metricLabel: 'Problems' },
+    reels: { label: 'Reel', badgeClass: 'rose', btnId: 'btnReelDash', btnClass: 'tab-reels', themeClass: 'reels-theme', metricLabel: 'Views' }
+  };
 
-        // Standardized Time Conversions
-        function parseTo24Hour(time12h) {
-            const [time, modifier] = time12h.split(' ');
-            let [hours, minutes] = time.split(':');
-            if (hours === '12') hours = '00';
-            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
-            return `${hours}:${minutes}`;
-        }
+  function buildTimeDropdownSelectors() {
+    ['startHH','endHH'].forEach(id => {
+      const el = document.getElementById(id);
+      for (let i = 1; i <= 12; i++) {
+        const v = i < 10 ? '0' + i : i;
+        el.innerHTML += `<option value="${v}">${v}</option>`;
+      }
+    });
+    ['startMM','endMM'].forEach(id => {
+      const el = document.getElementById(id);
+      ['00','15','30','45'].forEach(m => el.innerHTML += `<option value="${m}">${m}</option>`);
+    });
+  }
 
-        function calculateDeltaHours(start12h, end12h) {
-            const [sH, sM] = parseTo24Hour(start12h).split(':').map(Number);
-            const [eH, eM] = parseTo24Hour(end12h).split(':').map(Number);
-            let diff = (eH * 60 + eM) - (sH * 60 + sM);
-            if (diff < 0) diff += 24 * 60; // Handle rollover windows cleanly
-            return parseFloat((diff / 60).toFixed(2));
-        }
+  function extractTimeFromDropdowns(prefix) {
+    const hh = document.getElementById(`${prefix}HH`).value;
+    const mm = document.getElementById(`${prefix}MM`).value;
+    const period = document.getElementById(`${prefix}Period`).value;
+    return `${hh}:${mm} ${period}`;
+  }
 
-        function countDaysDifference(targetDateStr) {
-            const target = new Date(targetDateStr);
-            const current = new Date();
-            // Standardize midnights for precise analytics days calculations
-            target.setHours(0,0,0,0);
-            current.setHours(0,0,0,0);
-            const deltaMs = current - target;
-            return Math.floor(deltaMs / (1000 * 60 * 60 * 24));
-        }
+  function parseTo24Hour(time12h) {
+    const [time, modifier] = time12h.split(' ');
+    let [hours, minutes] = time.split(':');
+    if (hours === '12') hours = '00';
+    if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+    return `${hours}:${minutes}`;
+  }
 
-        function formatNumberString(num) {
-            return num >= 1000 ? (num / 1000).toFixed(1) + 'K' : num;
-        }
+  function calculateDeltaHours(start12h, end12h) {
+    const [sH, sM] = parseTo24Hour(start12h).split(':').map(Number);
+    const [eH, eM] = parseTo24Hour(end12h).split(':').map(Number);
+    let diff = (eH * 60 + eM) - (sH * 60 + sM);
+    if (diff < 0) diff += 24 * 60;
+    return parseFloat((diff / 60).toFixed(2));
+  }
 
-        // Segment Switcher Controls
-        function switchDashboard(mode) {
-            currentMode = mode;
-            const btnMain = document.getElementById('btnMainDash');
-            const btnReel = document.getElementById('btnReelDash');
-            const mainView = document.getElementById('mainDashboardView');
-            const reelsView = document.getElementById('reelsDashboardView');
-            
-            const themeFormColor = mode === 'main' ? 'from-teal-500 to-cyan-600' : 'from-rose-500 to-pink-600';
+  function countDaysDifference(targetDateStr) {
+    const target = new Date(targetDateStr);
+    const current = new Date();
+    target.setHours(0,0,0,0);
+    current.setHours(0,0,0,0);
+    return Math.floor((current - target) / 86400000);
+  }
 
-            if(mode === 'main') {
-                btnMain.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-md";
-                btnReel.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white";
-                mainView.classList.remove('hidden');
-                reelsView.classList.add('hidden');
-                
-                document.getElementById('formTitle').innerText = "Log Execution Metrics";
-                document.getElementById('formTitle').className = "text-sm font-bold tracking-wider uppercase text-teal-400";
-                document.getElementById('formBadge').className = "text-[10px] bg-teal-950 text-teal-400 border border-teal-800 px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider";
-                document.getElementById('formBadge').innerText = "Metrics";
-                document.getElementById('submitBtn').className = `w-full bg-gradient-to-r ${themeFormColor} text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest transition-all shadow-lg cursor-pointer`;
-            } else {
-                btnReel.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-md";
-                btnMain.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white";
-                reelsView.classList.remove('hidden');
-                mainView.classList.add('hidden');
+  function formatNumberString(num) {
+    return num >= 1000 ? (num / 1000).toFixed(1) + 'K' : String(num);
+  }
 
-                document.getElementById('formTitle').innerText = "Log Creative Distribution";
-                document.getElementById('formTitle').className = "text-sm font-bold tracking-wider uppercase text-rose-400";
-                document.getElementById('formBadge').className = "text-[10px] bg-rose-950 text-rose-400 border border-rose-800 px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider";
-                document.getElementById('formBadge').innerText = "Content Production";
-                document.getElementById('submitBtn').className = `w-full bg-gradient-to-r ${themeFormColor} text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest transition-all shadow-lg cursor-pointer`;
-            }
-            
-            populateCategoryMatrix();
-            toggleFormFields();
-            refreshEngineUI();
-        }
+  // ---- Tab Switching ----
+  function switchDashboard(mode) {
+    currentMode = mode;
+    const config = trackConfigs[mode];
 
-        function populateCategoryMatrix() {
-            const selectElement = document.getElementById('activityCategory');
-            selectElement.innerHTML = '';
-            tracksMap[currentMode].forEach(track => {
-                const opt = document.createElement('option');
-                opt.value = track;
-                opt.innerText = (track === 'Run' ? '🏃‍♂️ ' : track === 'Java' ? '☕ ' : track === 'Aptitude' ? '🧠 ' : '📱 ') + track;
-                selectElement.appendChild(opt);
-            });
-        }
+    // Toggle Tab classes
+    Object.keys(trackConfigs).forEach(k => {
+      const btn = document.getElementById(trackConfigs[k].btnId);
+      btn.classList.toggle('active', k === mode);
+    });
 
-        function toggleFormFields() {
-            const cat = document.getElementById('activityCategory').value;
-            const viewsField = document.getElementById('viewsField');
-            const lblTopic = document.getElementById('lblTopic');
-            const inputTopic = document.getElementById('activityTopic');
+    // Handle Form Visuals
+    document.getElementById('formTitle').textContent = `New ${config.label} Entry`;
+    document.getElementById('formBadge').textContent = mode === 'reels' ? 'Content' : 'Session';
+    document.getElementById('formBadge').className = `badge ${config.badgeClass}`;
+    document.getElementById('submitBtn').className = `submit-btn ${config.themeClass}`;
 
-            if (cat === 'Reel') {
-                viewsField.classList.remove('hidden');
-                document.getElementById('reelViews').setAttribute('required', 'true');
-                lblTopic.innerText = "Reel Concept / Title Variant";
-                inputTopic.placeholder = "e.g., Stack vs Heap Allocation Explained";
-            } else {
-                viewsField.classList.add('hidden');
-                document.getElementById('reelViews').removeAttribute('required');
-                lblTopic.innerText = "Task Objective / Topic";
-                inputTopic.placeholder = "e.g., Polymorphism & Inheritance Structuring";
-            }
-        }
+    // Set hidden categorical assignment
+    const select = document.getElementById('activityCategory');
+    select.innerHTML = `<option value="${config.label}">${config.label}</option>`;
 
-        // Initialize Technical Graphics Core Models
-        const mainCtx = document.getElementById('mainChart').getContext('2d');
-        const mainChart = new Chart(mainCtx, {
-            type: 'bar',
-            data: {
-                labels: [],
-                datasets: [
-                    { label: 'Run', data: [], backgroundColor: '#2dd4bf', borderRadius: 4 },
-                    { label: 'Java', data: [], backgroundColor: '#3b82f6', borderRadius: 4 },
-                    { label: 'Aptitude', data: [], backgroundColor: '#a855f7', borderRadius: 4 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { stacked: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { family: 'monospace' } } },
-                    y: { stacked: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b' }, title: { display: true, text: 'Hours Contributed', color: '#64748b' } }
-                },
-                plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 11 } } } }
-            }
-        });
+    // Toggle Input Fields Visibility
+    document.getElementById('runField').classList.toggle('show', mode === 'run');
+    document.getElementById('problemsField').classList.toggle('show', mode === 'java' || mode === 'aptitude');
+    document.getElementById('viewsField').classList.toggle('show', mode === 'reels');
+    document.getElementById('timeFieldsContainer').style.display = mode === 'reels' ? 'none' : 'block';
 
-        const reelsCtx = document.getElementById('reelsChart').getContext('2d');
-        const reelsChart = new Chart(reelsCtx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Media Impression Curve',
-                    data: [],
-                    borderColor: '#f43f5e',
-                    backgroundColor: 'rgba(244, 63, 94, 0.05)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.2,
-                    pointBackgroundColor: '#f43f5e'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { family: 'monospace' } } },
-                    y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' }, title: { display: true, text: 'Views Count', color: '#64748b' } }
-                },
-                plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 11 } } } }
-            }
-        });
+    // Toggle Dynamic Requirements
+    document.getElementById('runKm').toggleAttribute('required', mode === 'run');
+    document.getElementById('solvedProblems').toggleAttribute('required', mode === 'java' || mode === 'aptitude');
+    document.getElementById('reelViews').toggleAttribute('required', mode === 'reels');
 
-        // UI Core Ledger System Painting Execution
-        function refreshEngineUI() {
-            localStorage.setItem('corp_tracker_matrix_db', JSON.stringify(database));
+    // Update labels and descriptions
+    const lblTopic = document.getElementById('lblTopic');
+    const inputTopic = document.getElementById('activityTopic');
+    if (mode === 'reels') {
+      lblTopic.textContent = 'Reel title';
+      inputTopic.placeholder = 'e.g. Stack vs heap allocation explained';
+      document.getElementById('thTime').style.display = 'none'; // Remove time column heading
+    } else {
+      lblTopic.textContent = 'Topic';
+      inputTopic.placeholder = mode === 'run' ? 'e.g. Morning Trail Run' : 'e.g. Loops & Arrays';
+      document.getElementById('thTime').style.display = ''; // Restore time column heading
+    }
 
-            const tbody = document.getElementById('ledgerTableBody');
-            tbody.innerHTML = '';
+    refreshEngineUI();
+  }
 
-            const filteredSet = database.filter(item => tracksMap[currentMode].includes(item.category));
-            const sortedSet = [...filteredSet].sort((a, b) => new Date(b.date) - new Date(a.date));
+  // ---- Dynamic Unified Chart Layout ----
+  const ctx = document.getElementById('universalChart').getContext('2d');
+  const universalChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: [], datasets: [{ data: [], borderRadius: 4, maxBarThickness: 28 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: '#1b1f29' }, ticks: { color: '#5b6378', font: { family: 'JetBrains Mono', size: 10 } } },
+        y: { grid: { color: '#1b1f29' }, ticks: { color: '#5b6378' }, title: { display: true, text: '', color: '#5b6378' } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
 
-            sortedSet.forEach(item => {
-                let netReturnDisplay = '';
-                
-                if (item.category === 'Reel') {
-                    const daysAge = countDaysDifference(item.date);
-                    // Five days lifecycle verification trigger badge
-                    const verificationBadge = daysAge >= 5 
-                        ? `<span class="block text-[9px] font-mono bg-rose-950/40 text-rose-400 border border-rose-900 px-1 py-0.5 rounded mt-1 text-center font-bold uppercase tracking-wider">Mature (+5 Days)</span>` 
-                        : '';
-                    
-                    netReturnDisplay = `<div><span class="text-rose-400 font-bold">${formatNumberString(item.views)} views</span>${verificationBadge}</div>`;
-                } else {
-                    netReturnDisplay = `<span class="text-cyan-400 font-bold">${item.duration} hrs</span>`;
-                }
+  function updateChartEngine(labels, datasetData, labelTitle, colorHex, type = 'bar') {
+    universalChart.config.type = type;
+    universalChart.data.labels = labels;
+    universalChart.data.datasets[0].data = datasetData;
+    universalChart.data.datasets[0].label = labelTitle;
+    universalChart.data.datasets[0].backgroundColor = type === 'line' ? 'rgba(251,113,133,0.08)' : colorHex;
+    universalChart.data.datasets[0].borderColor = colorHex;
+    universalChart.data.datasets[0].fill = type === 'line';
+    universalChart.options.scales.y.title.text = labelTitle;
+    universalChart.update();
+  }
 
-                const secondaryNarrative = item.desc ? `<p class="text-[11px] text-slate-500 mt-1 font-sans italic max-w-xs md:max-w-lg truncate">${item.desc}</p>` : '';
+  // ---- Render Dashboard Metrics & Tables ----
+  function refreshEngineUI() {
+    localStorage.setItem('daily_tracker_db', JSON.stringify(database));
+    const currentLabel = trackConfigs[currentMode].label;
+    
+    const strip = document.getElementById('statStrip');
+    const today = new Date().toISOString().split('T')[0];
+    const todaysItems = database.filter(d => d.date === today && d.category === currentLabel);
+    const allItems = database.filter(d => d.category === currentLabel);
 
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-900/40 transition-colors border-b border-slate-900/50";
-                tr.innerHTML = `
-                    <td class="py-4 font-mono text-slate-400 text-[11px]">${item.date}</td>
-                    <td class="py-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-950 text-slate-400 border border-slate-800">${item.category}</span></td>
-                    <td class="py-4">
-                        <span class="font-bold text-slate-200 block tracking-wide">${item.topic}</span>
-                        ${secondaryNarrative}
-                    </td>
-                    <td class="py-4 font-mono text-slate-400 text-[11px]">${item.start} - ${item.end}</td>
-                    <td class="py-4 text-right font-mono">${netReturnDisplay}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+    // 1. Render Stat Boxes
+    if (currentMode === 'run') {
+      const todayKm = todaysItems.reduce((s,c) => s + parseFloat(c.km || 0), 0);
+      const totalKm = allItems.reduce((s,c) => s + parseFloat(c.km || 0), 0);
+      strip.innerHTML = `
+        <div class="stat"><div class="stat-label">Running Today</div><div class="stat-value teal">${todayKm.toFixed(1)} KM</div></div>
+        <div class="stat"><div class="stat-label">Total Distance</div><div class="stat-value teal">${totalKm.toFixed(1)} KM</div></div>
+        <div class="stat"><div class="stat-label">Runs Logged</div><div class="stat-value">${allItems.length}</div></div>
+        <div class="stat"><div class="stat-label">Avg / Run</div><div class="stat-value">${allItems.length ? (totalKm/allItems.length).toFixed(1) : '0.0'} KM</div></div>`;
+    } else if (currentMode === 'java' || currentMode === 'aptitude') {
+      const todayProblems = todaysItems.reduce((s,c) => s + parseInt(c.problems || 0), 0);
+      const totalProblems = allItems.reduce((s,c) => s + parseInt(c.problems || 0), 0);
+      const colorClass = trackConfigs[currentMode].badgeClass;
+      strip.innerHTML = `
+        <div class="stat"><div class="stat-label">Problems Today</div><div class="stat-value ${colorClass}">${todayProblems}</div></div>
+        <div class="stat"><div class="stat-label">Total Solved</div><div class="stat-value ${colorClass}">${totalProblems}</div></div>
+        <div class="stat"><div class="stat-label">Sessions Logged</div><div class="stat-value">${allItems.length}</div></div>
+        <div class="stat"><div class="stat-label">Avg / Session</div><div class="stat-value">${allItems.length ? Math.round(totalProblems/allItems.length) : 0}</div></div>`;
+    } else {
+      const totalViews = allItems.reduce((s,c) => s + (c.views||0), 0);
+      const matureCount = allItems.filter(d => countDaysDifference(d.date) >= 5).length;
+      strip.innerHTML = `
+        <div class="stat"><div class="stat-label">Reels Posted</div><div class="stat-value rose">${allItems.length}</div></div>
+        <div class="stat"><div class="stat-label">Total Views</div><div class="stat-value rose">${formatNumberString(totalViews)}</div></div>
+        <div class="stat"><div class="stat-label">Avg Views / Reel</div><div class="stat-value">${allItems.length ? formatNumberString(Math.round(totalViews/allItems.length)) : 0}</div></div>
+        <div class="stat"><div class="stat-label">Matured (5d+)</div><div class="stat-value teal">${matureCount}</div></div>`;
+    }
 
-            // Recompute Analytical Trends Window
-            const dynamicLabels = [...new Set(database.map(a => a.date))].sort((a, b) => new Date(a) - new Date(b)).slice(-7);
+    // 2. Render Activity Ledger Table
+    const tbody = document.getElementById('ledgerTableBody');
+    tbody.innerHTML = '';
+    const sorted = [...allItems].sort((a,b) => new Date(b.date) - new Date(a.date));
 
-            if (currentMode === 'main') {
-                const runArray = [], javaArray = [], aptArray = [];
+    if (sorted.length === 0) {
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="5">No entries yet — log your first tracking point.</td></tr>`;
+    }
 
-                dynamicLabels.forEach(date => {
-                    runArray.push(database.filter(a => a.date === date && a.category === 'Run').reduce((s, c) => s + c.duration, 0));
-                    javaArray.push(database.filter(a => a.date === date && a.category === 'Java').reduce((s, c) => s + c.duration, 0));
-                    aptArray.push(database.filter(a => a.date === date && a.category === 'Aptitude').reduce((s, c) => s + c.duration, 0));
-                });
+    sorted.forEach(item => {
+      let resultCol = '';
+      let timeColHtml = `<td class="timecol">${item.start || ''} – ${item.end || ''}</td>`;
 
-                mainChart.data.labels = dynamicLabels;
-                mainChart.data.datasets[0].data = runArray;
-                mainChart.data.datasets[1].data = javaArray;
-                mainChart.data.datasets[2].data = aptArray;
-                mainChart.update();
-            } else {
-                const viewsArray = [];
-                dynamicLabels.forEach(date => {
-                    viewsArray.push(database.filter(a => a.date === date && a.category === 'Reel').reduce((s, c) => s + parseInt(c.views || 0), 0));
-                });
+      if (item.category === 'Run') {
+        resultCol = `<span class="return-metric run">${item.km} KM</span>`;
+      } else if (item.category === 'Java' || item.category === 'Aptitude') {
+        const theme = item.category.toLowerCase();
+        resultCol = `<span class="return-metric ${theme}">${item.problems} Problems</span>`;
+      } else if (item.category === 'Reel') {
+        timeColHtml = ''; // Completely delete space layout for time tracking columns
+        const daysAge = countDaysDifference(item.date);
+        const matureTag = daysAge >= 5 ? `<span class="mature-tag">Matured (5d+)</span>` : '';
+        resultCol = `<div class="view-wrapper"><span class="return-metric reels">${formatNumberString(item.views)} views</span>${matureTag}</div>`;
+      }
 
-                reelsChart.data.labels = dynamicLabels;
-                reelsChart.data.datasets[0].data = viewsArray;
-                reelsChart.update();
-            }
-        }
+      const note = item.desc ? `<span class="topic-note">${item.desc}</span>` : '';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="timecol">${item.date}</td>
+        <td><span class="pill">${item.category}</span></td>
+        <td><span class="topic-name">${item.topic}</span>${note}</td>
+        ${timeColHtml}
+        <td style="text-align:right;">${resultCol}</td>`;
+      tbody.appendChild(tr);
+    });
 
-        // Processing Pipeline Form Submissions
-        document.getElementById('analyticsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    // 3. Sync Chart Metrics
+    const dynamicLabels = [...new Set(database.map(a => a.date))].sort((a,b) => new Date(a) - new Date(b)).slice(-7);
+    document.getElementById('chartTitle').textContent = `${currentLabel} Performance Metrics`;
+    
+    if (currentMode === 'run') {
+      const dataArr = dynamicLabels.map(date => database.filter(a => a.date === date && a.category === 'Run').reduce((s,c) => s + parseFloat(c.km || 0), 0));
+      updateChartEngine(dynamicLabels, dataArr, 'KM', '#2dd4bf', 'bar');
+    } else if (currentMode === 'java') {
+      const dataArr = dynamicLabels.map(date => database.filter(a => a.date === date && a.category === 'Java').reduce((s,c) => s + parseInt(c.problems || 0), 0));
+      updateChartEngine(dynamicLabels, dataArr, 'Problems Solved', '#5b8def', 'bar');
+    } else if (currentMode === 'aptitude') {
+      const dataArr = dynamicLabels.map(date => database.filter(a => a.date === date && a.category === 'Aptitude').reduce((s,c) => s + parseInt(c.problems || 0), 0));
+      updateChartEngine(dynamicLabels, dataArr, 'Problems Solved', '#a78bfa', 'bar');
+    } else if (currentMode === 'reels') {
+      const dataArr = dynamicLabels.map(date => database.filter(a => a.date === date && a.category === 'Reel').reduce((s,c) => s + parseInt(c.views || 0), 0));
+      updateChartEngine(dynamicLabels, dataArr, 'Views', '#fb7185', 'line');
+    }
+  }
 
-            const date = document.getElementById('activityDate').value;
-            const category = document.getElementById('activityCategory').value;
-            const topic = document.getElementById('activityTopic').value;
-            const desc = document.getElementById('activityDesc').value;
-            const views = document.getElementById('reelViews').value || 0;
+  // ---- Form Handling Submission ----
+  document.getElementById('analyticsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            const startFormatted = extractTimeFromDropdowns('start');
-            const endFormatted = extractTimeFromDropdowns('end');
-            
-            const netDuration = calculateDeltaHours(startFormatted, endFormatted);
+    const date = document.getElementById('activityDate').value;
+    const category = document.getElementById('activityCategory').value;
+    const topic = document.getElementById('activityTopic').value;
+    const desc = document.getElementById('activityDesc').value;
+    
+    let km = 0, problems = 0, views = 0, start = '', end = '', duration = 0;
 
-            if (netDuration <= 0) {
-                alert("Analytics Error: Sequence Termination window must log chronologically after Sequence Start time.");
-                return;
-            }
+    if (currentMode === 'run') {
+      km = document.getElementById('runKm').value;
+    } else if (currentMode === 'java' || currentMode === 'aptitude') {
+      problems = document.getElementById('solvedProblems').value;
+    } else if (currentMode === 'reels') {
+      views = document.getElementById('reelViews').value || 0;
+    }
 
-            database.push({ 
-                date, category, topic, desc, 
-                start: startFormatted, end: endFormatted, 
-                duration: netDuration, views: parseInt(views) 
-            });
-            
-            refreshEngineUI();
+    if (currentMode !== 'reels') {
+      start = extractTimeFromDropdowns('start');
+      end = extractTimeFromDropdowns('end');
+      duration = calculateDeltaHours(start, end);
+      if (duration <= 0) {
+        alert('End time must be after start time.');
+        return;
+      }
+    }
 
-            // Clear Dynamic values
-            document.getElementById('activityTopic').value = '';
-            document.getElementById('activityDesc').value = '';
-            document.getElementById('reelViews').value = '';
-        });
+    database.push({ date, category, topic, desc, start, end, duration, km, problems, views: parseInt(views) });
+    refreshEngineUI();
 
-        // Engine System Boot Execution
-        buildTimeDropdownSelectors();
-        populateCategoryMatrix();
-        toggleFormFields();
-        refreshEngineUI();
-    </script>
+    // Reset fields cleanly
+    document.getElementById('activityTopic').value = '';
+    document.getElementById('activityDesc').value = '';
+    document.getElementById('runKm').value = '';
+    document.getElementById('solvedProblems').value = '';
+    document.getElementById('reelViews').value = '';
+  });
+
+  // ---- Initialize UI Engine ----
+  buildTimeDropdownSelectors();
+  switchDashboard('run');
+</script>
+
 </body>
 </html>
-
