@@ -3,137 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Productivity & Social Dashboard</title>
-    <!-- Tailwind CSS for sleek dark-mode aesthetics -->
+    <title>Enterprise Productivity Analytics Engine</title>
+    <!-- Tailwind CSS for production-grade styling -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Chart.js for professional analytics -->
+    <!-- Chart.js for visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-teal-500 selection:text-slate-900">
 
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <!-- Top Navigation / Header -->
-        <header class="flex flex-col md:flex-row justify-between items-center border-b border-slate-800 pb-6 mb-8 gap-4">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+        <!-- Enterprise Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 mb-10 gap-6">
             <div>
-                <h1 class="text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500">
-                    CORE ANALYTICS ENGINE
-                </h1>
-                <p class="text-slate-400 text-xs uppercase tracking-widest mt-1">Metrics, Habit Tracking & Audience Growth</p>
+                <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+                    <h1 class="text-2xl font-black tracking-wider text-slate-100 uppercase">
+                        PERFORMANCE ANALYSIS SYSTEM
+                    </h1>
+                </div>
+                <p class="text-slate-400 text-xs font-mono uppercase tracking-widest mt-1.5">Core Execution Hub & Analytics Matrix</p>
             </div>
             
-            <!-- Dashboard Switcher Toggles -->
-            <div class="inline-flex bg-slate-900 border border-slate-800 p-1 rounded-xl shadow-inner">
-                <button id="btnMainDash" onclick="switchDashboard('main')" class="px-5 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-md">
-                    💼 Main Focus
+            <!-- Strategic Segment Toggles -->
+            <div class="inline-flex bg-slate-900/80 border border-slate-800 p-1 rounded-xl shadow-inner backdrop-blur-sm">
+                <button id="btnMainDash" onclick="switchDashboard('main')" class="px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-md">
+                    💼 Core Tracks
                 </button>
-                <button id="btnReelDash" onclick="switchDashboard('reels')" class="px-5 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white">
-                    📱 Reels Performance
+                <button id="btnReelDash" onclick="switchDashboard('reels')" class="px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white">
+                    📱 Reels Suite
                 </button>
             </div>
         </header>
 
-        <!-- Main Workspace Grid -->
+        <!-- Main Dashboard Workspace -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- Left Column: Context-Aware Dynamic Input Form -->
+            <!-- Left Data Intake Module -->
             <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl h-fit">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 id="formTitle" class="text-lg font-bold text-teal-400">Log Daily Core Activity</h2>
-                    <span id="formBadge" class="text-[10px] bg-teal-950 text-teal-400 border border-teal-800 px-2 py-0.5 rounded-md font-semibold tracking-wider uppercase">Metrics</span>
+                <div class="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
+                    <h2 id="formTitle" class="text-sm font-bold tracking-wider uppercase text-teal-400">Log Execution Metrics</h2>
+                    <span id="formBadge" class="text-[10px] bg-teal-950 text-teal-400 border border-teal-800 px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider">Metrics</span>
                 </div>
                 
-                <form id="activityForm" class="space-y-4">
-                    <!-- Date Input -->
+                <form id="analyticsForm" class="space-y-5">
+                    <!-- Target Calendar Log Point -->
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Date</label>
-                        <input type="date" id="activityDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Date Entry</label>
+                        <input type="date" id="activityDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
                     </div>
 
-                    <!-- Category Picker -->
+                    <!-- Functional Track Node -->
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Category</label>
-                        <select id="activityCategory" onchange="toggleFormFields()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors cursor-pointer">
-                            <!-- Populated dynamically via script to match current view -->
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Focus Track</label>
+                        <select id="activityCategory" onchange="toggleFormFields()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors cursor-pointer">
+                            <!-- Injected by Controller -->
                         </select>
                     </div>
 
-                    <!-- Field: Topic -->
+                    <!-- System Focus Subject -->
                     <div>
-                        <label id="lblTopic" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Topic / Subject</label>
-                        <input type="text" id="activityTopic" placeholder="e.g., Object Oriented Programming" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
+                        <label id="lblTopic" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Task Objective / Topic</label>
+                        <input type="text" id="activityTopic" placeholder="Enter target focus topic..." required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
                     </div>
 
-                    <!-- Field: Reels Specific (Views Count) -->
+                    <!-- Media Engagement Volume Component -->
                     <div id="viewsField" class="hidden">
-                        <label class="block text-[11px] font-bold text-rose-400 uppercase tracking-wider mb-1">Views Showcased</label>
-                        <input type="number" id="reelViews" placeholder="e.g., 14500" class="w-full bg-slate-950 border border-rose-950/50 rounded-xl px-3 py-2 text-sm text-rose-200 focus:outline-none focus:border-rose-500 transition-colors">
+                        <label class="block text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1.5">Views Metric</label>
+                        <input type="number" id="reelViews" placeholder="e.g., 25400" class="w-full bg-slate-950 border border-rose-950 rounded-xl px-3 py-2.5 text-sm text-rose-200 focus:outline-none focus:border-rose-500 transition-colors">
                     </div>
 
-                    <!-- Dynamic Time Interval Set -->
-                    <div class="grid grid-cols-2 gap-4">
+                    <!-- Custom Dropdown Time Selectors -->
+                    <div class="space-y-4">
+                        <!-- Start Sequence Dropdowns -->
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Start Time</label>
-                            <input type="time" id="startTime" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Sequence Start Window</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <select id="startHH" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
+                                <select id="startMM" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
+                                <select id="startPeriod" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400">
+                                    <option value="AM">AM</option>
+                                    <option value="PM">PM</option>
+                                </select>
+                            </div>
                         </div>
+
+                        <!-- End Sequence Dropdowns -->
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">End Time</label>
-                            <input type="time" id="endTime" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Sequence Termination Window</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <select id="endHH" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
+                                <select id="endMM" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400"></select>
+                                <select id="endPeriod" class="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-teal-400">
+                                    <option value="AM">AM</option>
+                                    <option value="PM">PM</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Field: Narrative / Description -->
+                    <!-- Strategy Breakdown Description -->
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Detailed Description</label>
-                        <textarea id="activityDesc" rows="3" placeholder="Break down your key milestones or notes here..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors resize-none"></textarea>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Operational Log Notes</label>
+                        <textarea id="activityDesc" rows="3" placeholder="Log critical takeaways or workflow parameters..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-400 transition-colors resize-none"></textarea>
                     </div>
 
-                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-400 hover:to-cyan-500 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-teal-500/10 cursor-pointer">
-                        Commit Entry
+                    <!-- Submission Pipeline Trigger -->
+                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-400 hover:to-cyan-500 text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest transition-all shadow-lg shadow-teal-500/10 cursor-pointer">
+                        Commit Record Set
                     </button>
                 </form>
             </div>
 
-            <!-- Right Columns: Visualization & Dynamic Databases -->
+            <!-- Visualization Arena & Historical Databases -->
             <div class="lg:col-span-2 space-y-8">
                 
-                <!-- Main Dashboard View Container -->
-                <div id="mainDashboardView" class="space-y-8">
-                    <!-- Main Chart Section -->
-                    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
-                        <h2 class="text-lg font-bold mb-4 text-cyan-400">Weekly Engine Distribution (Hours)</h2>
-                        <div class="relative h-64 w-full">
-                            <canvas id="mainChart"></canvas>
-                        </div>
+                <!-- Main Engineering Track Analytics Module -->
+                <div id="mainDashboardView" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+                    <h2 class="text-sm font-bold tracking-wider uppercase mb-6 text-cyan-400">Weekly Delta Allocation (Hours)</h2>
+                    <div class="relative h-64 w-full">
+                        <canvas id="mainChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Reels Dashboard View Container (Hidden initially) -->
-                <div id="reelsDashboardView" class="space-y-8 hidden">
-                    <!-- Reels Analytics Graph -->
-                    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
-                        <h2 class="text-lg font-bold mb-4 text-rose-400">Reels Virality & View Trajectory</h2>
-                        <div class="relative h-64 w-full">
-                            <canvas id="reelsChart"></canvas>
-                        </div>
+                <!-- Specialized Media Optimization Engine -->
+                <div id="reelsDashboardView" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl hidden">
+                    <h2 class="text-sm font-bold tracking-wider uppercase mb-6 text-rose-400">Media Traction Velocity Analytics</h2>
+                    <div class="relative h-64 w-full">
+                        <canvas id="reelsChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Shared Activity Database Engine -->
+                <!-- Structured Log Ledger System -->
                 <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
-                    <h2 class="text-lg font-bold mb-4 text-slate-300">Detailed Analytical Ledger</h2>
+                    <h2 class="text-sm font-bold tracking-wider uppercase mb-6 text-slate-300">Audited Activity Ledger</h2>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
-                                <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
-                                    <th class="pb-3">Timeline</th>
-                                    <th class="pb-3">Type</th>
-                                    <th class="pb-3">Topic / Info</th>
-                                    <th class="pb-3">Session window</th>
-                                    <th class="pb-3 text-right">Yield</th>
+                                <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-widest font-mono text-[10px]">
+                                    <th class="pb-3.5">Timeline</th>
+                                    <th class="pb-3.5">System Element</th>
+                                    <th class="pb-3.5">Topic Architecture / Directives</th>
+                                    <th class="pb-3.5">Execution Window</th>
+                                    <th class="pb-3.5 text-right">Net Return</th>
                                 </tr>
                             </thead>
-                            <tbody id="ledgerTableBody" class="divide-y divide-slate-800/60 text-slate-300">
-                                <!-- Dynamic Context injection point -->
+                            <tbody id="ledgerTableBody" class="divide-y divide-slate-800/50 text-slate-300">
+                                <!-- Computed Row Nodes injected dynamically here -->
                             </tbody>
                         </table>
                     </div>
@@ -144,45 +159,75 @@
     </div>
 
     <script>
-        // Set Today's default date
+        // System Launch Setup Configurations
         document.getElementById('activityDate').value = new Date().toISOString().split('T')[0];
 
-        // System state architecture
-        let currentMode = 'main'; // 'main' or 'reels'
-        let database = JSON.parse(localStorage.getItem('executive_tracker_db')) || [];
+        let currentMode = 'main'; 
+        let database = JSON.parse(localStorage.getItem('corp_tracker_matrix_db')) || [];
 
-        // UI Configuration matrices
-        const categoriesMap = {
-            main: ['Run', 'Java', 'Aptitude'],
-            reels: ['Reel']
-        };
+        const tracksMap = { main: ['Run', 'Java', 'Aptitude'], reels: ['Reel'] };
 
-        // Standard Utility: Convert 24-hr layout string to 12-hr AM/PM presentation
-        function formatTo12Hour(timeString) {
-            if (!timeString) return '';
-            let [hours, minutes] = timeString.split(':').map(Number);
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12; // Handle mid-night/noon mapping logic
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            return `${hours}:${minutes} ${ampm}`;
+        // Construct Premium Manual Dropdown Matrix Selection Arrays
+        function buildTimeDropdownSelectors() {
+            const hhSelectors = ['startHH', 'endHH'];
+            const mmSelectors = ['startMM', 'endMM'];
+            
+            hhSelectors.forEach(id => {
+                const el = document.getElementById(id);
+                for(let i = 1; i <= 12; i++) {
+                    let formatted = i < 10 ? '0' + i : i;
+                    el.innerHTML += `<option value="${formatted}">${formatted}</option>`;
+                }
+            });
+
+            mmSelectors.forEach(id => {
+                const el = document.getElementById(id);
+                ['00', '15', '30', '45'].forEach(min => {
+                    el.innerHTML += `<option value="${min}">${min}</option>`;
+                });
+            });
         }
 
-        // Calculation Module: Compute delta session windows in standard Float hours
-        function computeHoursDelta(start, end) {
-            const [sH, sM] = start.split(':').map(Number);
-            const [eH, eM] = end.split(':').map(Number);
-            let deltaMins = (eH * 60 + eM) - (sH * 60 + sM);
-            if (deltaMins < 0) deltaMins += 24 * 60; // Safe-guard overnight loops
-            return parseFloat((deltaMins / 60).toFixed(2));
+        // Process Dropdown configurations to a standard format
+        function extractTimeFromDropdowns(prefix) {
+            const hh = document.getElementById(`${prefix}HH`).value;
+            const mm = document.getElementById(`${prefix}MM`).value;
+            const period = document.getElementById(`${prefix}Period`).value;
+            return `${hh}:${mm} ${period}`;
         }
 
-        // Number formatter for neat view states
-        function formatNumber(num) {
-            return num >= 1000 ? (num / 1000).toFixed(1) + 'k' : num;
+        // Standardized Time Conversions
+        function parseTo24Hour(time12h) {
+            const [time, modifier] = time12h.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (hours === '12') hours = '00';
+            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+            return `${hours}:${minutes}`;
         }
 
-        // Core Dashboard Router View Controller
+        function calculateDeltaHours(start12h, end12h) {
+            const [sH, sM] = parseTo24Hour(start12h).split(':').map(Number);
+            const [eH, eM] = parseTo24Hour(end12h).split(':').map(Number);
+            let diff = (eH * 60 + eM) - (sH * 60 + sM);
+            if (diff < 0) diff += 24 * 60; // Handle rollover windows cleanly
+            return parseFloat((diff / 60).toFixed(2));
+        }
+
+        function countDaysDifference(targetDateStr) {
+            const target = new Date(targetDateStr);
+            const current = new Date();
+            // Standardize midnights for precise analytics days calculations
+            target.setHours(0,0,0,0);
+            current.setHours(0,0,0,0);
+            const deltaMs = current - target;
+            return Math.floor(deltaMs / (1000 * 60 * 60 * 24));
+        }
+
+        function formatNumberString(num) {
+            return num >= 1000 ? (num / 1000).toFixed(1) + 'K' : num;
+        }
+
+        // Segment Switcher Controls
         function switchDashboard(mode) {
             currentMode = mode;
             const btnMain = document.getElementById('btnMainDash');
@@ -191,219 +236,224 @@
             const reelsView = document.getElementById('reelsDashboardView');
             
             const themeFormColor = mode === 'main' ? 'from-teal-500 to-cyan-600' : 'from-rose-500 to-pink-600';
-            const themeBorderColor = mode === 'main' ? 'text-teal-400' : 'text-rose-400';
 
             if(mode === 'main') {
-                btnMain.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-md";
-                btnReel.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white";
+                btnMain.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-md";
+                btnReel.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white";
                 mainView.classList.remove('hidden');
                 reelsView.classList.add('hidden');
                 
-                document.getElementById('formTitle').innerText = "Log Daily Core Activity";
-                document.getElementById('formTitle').className = "text-lg font-bold text-teal-400";
-                document.getElementById('formBadge').className = "text-[10px] bg-teal-950 text-teal-400 border border-teal-800 px-2 py-0.5 rounded-md font-semibold tracking-wider uppercase";
+                document.getElementById('formTitle').innerText = "Log Execution Metrics";
+                document.getElementById('formTitle').className = "text-sm font-bold tracking-wider uppercase text-teal-400";
+                document.getElementById('formBadge').className = "text-[10px] bg-teal-950 text-teal-400 border border-teal-800 px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider";
                 document.getElementById('formBadge').innerText = "Metrics";
-                document.getElementById('submitBtn').className = `w-full bg-gradient-to-r ${themeFormColor} text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer`;
+                document.getElementById('submitBtn').className = `w-full bg-gradient-to-r ${themeFormColor} text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest transition-all shadow-lg cursor-pointer`;
             } else {
-                btnReel.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-md";
-                btnMain.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white";
+                btnReel.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-md";
+                btnMain.className = "px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer text-slate-400 hover:text-white";
                 reelsView.classList.remove('hidden');
                 mainView.classList.add('hidden');
 
-                document.getElementById('formTitle').innerText = "Log Content Parameters";
-                document.getElementById('formTitle').className = "text-lg font-bold text-rose-400";
-                document.getElementById('formBadge').className = "text-[10px] bg-rose-950 text-rose-400 border border-rose-800 px-2 py-0.5 rounded-md font-semibold tracking-wider uppercase";
-                document.getElementById('formBadge').innerText = "Content";
-                document.getElementById('submitBtn').className = `w-full bg-gradient-to-r ${themeFormColor} text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer`;
+                document.getElementById('formTitle').innerText = "Log Creative Distribution";
+                document.getElementById('formTitle').className = "text-sm font-bold tracking-wider uppercase text-rose-400";
+                document.getElementById('formBadge').className = "text-[10px] bg-rose-950 text-rose-400 border border-rose-800 px-2 py-0.5 rounded font-mono font-semibold uppercase tracking-wider";
+                document.getElementById('formBadge').innerText = "Content Production";
+                document.getElementById('submitBtn').className = `w-full bg-gradient-to-r ${themeFormColor} text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest transition-all shadow-lg cursor-pointer`;
             }
             
-            populateCategories();
+            populateCategoryMatrix();
             toggleFormFields();
             refreshEngineUI();
         }
 
-        // Dynamically shift category list depending on active dashboard context
-        function populateCategories() {
+        function populateCategoryMatrix() {
             const selectElement = document.getElementById('activityCategory');
             selectElement.innerHTML = '';
-            categoriesMap[currentMode].forEach(cat => {
+            tracksMap[currentMode].forEach(track => {
                 const opt = document.createElement('option');
-                opt.value = cat;
-                opt.innerText = (cat === 'Run' ? '🏃‍♂️ ' : cat === 'Java' ? '☕ ' : cat === 'Aptitude' ? '🧠 ' : '📱 ') + cat;
+                opt.value = track;
+                opt.innerText = (track === 'Run' ? '🏃‍♂️ ' : track === 'Java' ? '☕ ' : track === 'Aptitude' ? '🧠 ' : '📱 ') + track;
                 selectElement.appendChild(opt);
             });
         }
 
-        // Form fields dynamic structural layout state machine
         function toggleFormFields() {
-            const category = document.getElementById('activityCategory').value;
+            const cat = document.getElementById('activityCategory').value;
             const viewsField = document.getElementById('viewsField');
             const lblTopic = document.getElementById('lblTopic');
             const inputTopic = document.getElementById('activityTopic');
 
-            if (category === 'Reel') {
+            if (cat === 'Reel') {
                 viewsField.classList.remove('hidden');
                 document.getElementById('reelViews').setAttribute('required', 'true');
-                lblTopic.innerText = "Video Hook / Topic Title";
-                inputTopic.placeholder = "e.g., Learn Arrays in 30 Seconds";
+                lblTopic.innerText = "Reel Concept / Title Variant";
+                inputTopic.placeholder = "e.g., Stack vs Heap Allocation Explained";
             } else {
                 viewsField.classList.add('hidden');
                 document.getElementById('reelViews').removeAttribute('required');
-                lblTopic.innerText = "Topic / Subject";
-                inputTopic.placeholder = "e.g., Object Oriented Programming";
+                lblTopic.innerText = "Task Objective / Topic";
+                inputTopic.placeholder = "e.g., Polymorphism & Inheritance Structuring";
             }
         }
 
-        // Initialize Core Activity Chart Instance
+        // Initialize Technical Graphics Core Models
         const mainCtx = document.getElementById('mainChart').getContext('2d');
         const mainChart = new Chart(mainCtx, {
             type: 'bar',
             data: {
                 labels: [],
                 datasets: [
-                    { label: 'Run', data: [], backgroundColor: '#2dd4bf', borderRadius: 6 },
-                    { label: 'Java', data: [], backgroundColor: '#3b82f6', borderRadius: 6 },
-                    { label: 'Aptitude', data: [], backgroundColor: '#a855f7', borderRadius: 6 }
+                    { label: 'Run', data: [], backgroundColor: '#2dd4bf', borderRadius: 4 },
+                    { label: 'Java', data: [], backgroundColor: '#3b82f6', borderRadius: 4 },
+                    { label: 'Aptitude', data: [], backgroundColor: '#a855f7', borderRadius: 4 }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { stacked: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
+                    x: { stacked: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { family: 'monospace' } } },
                     y: { stacked: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b' }, title: { display: true, text: 'Hours Contributed', color: '#64748b' } }
                 },
                 plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 11 } } } }
             }
         });
 
-        // Initialize Reels Performance Chart Instance
         const reelsCtx = document.getElementById('reelsChart').getContext('2d');
         const reelsChart = new Chart(reelsCtx, {
             type: 'line',
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'Views Showcase Metric',
+                    label: 'Media Impression Curve',
                     data: [],
                     borderColor: '#f43f5e',
-                    backgroundColor: 'rgba(244, 63, 94, 0.1)',
-                    borderWidth: 3,
+                    backgroundColor: 'rgba(244, 63, 94, 0.05)',
+                    borderWidth: 2,
                     fill: true,
-                    tension: 0.3,
-                    pointBackgroundColor: '#fda4af'
+                    tension: 0.2,
+                    pointBackgroundColor: '#f43f5e'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
-                    y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' }, title: { display: true, text: 'Views Quantified', color: '#64748b' } }
+                    x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { family: 'monospace' } } },
+                    y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' }, title: { display: true, text: 'Views Count', color: '#64748b' } }
                 },
                 plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 11 } } } }
             }
         });
 
-        // Interface render logic pipeline
+        // UI Core Ledger System Painting Execution
         function refreshEngineUI() {
-            localStorage.setItem('executive_tracker_db', JSON.stringify(database));
+            localStorage.setItem('corp_tracker_matrix_db', JSON.stringify(database));
 
-            // 1. Ledger Table Mutation Engine
             const tbody = document.getElementById('ledgerTableBody');
             tbody.innerHTML = '';
 
-            // Render matching logs dynamically tailored to the context mode
-            const runningContextLogs = database.filter(item => categoriesMap[currentMode].includes(item.category));
-            const sortedOutput = [...runningContextLogs].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const filteredSet = database.filter(item => tracksMap[currentMode].includes(item.category));
+            const sortedSet = [...filteredSet].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            sortedOutput.forEach(item => {
-                const yieldMetrics = item.category === 'Reel' 
-                    ? `<span class="text-rose-400 font-bold">${formatNumber(item.views)} views</span>` 
-                    : `<span class="text-cyan-400 font-bold">${item.duration} hrs</span>`;
+            sortedSet.forEach(item => {
+                let netReturnDisplay = '';
+                
+                if (item.category === 'Reel') {
+                    const daysAge = countDaysDifference(item.date);
+                    // Five days lifecycle verification trigger badge
+                    const verificationBadge = daysAge >= 5 
+                        ? `<span class="block text-[9px] font-mono bg-rose-950/40 text-rose-400 border border-rose-900 px-1 py-0.5 rounded mt-1 text-center font-bold uppercase tracking-wider">Mature (+5 Days)</span>` 
+                        : '';
+                    
+                    netReturnDisplay = `<div><span class="text-rose-400 font-bold">${formatNumberString(item.views)} views</span>${verificationBadge}</div>`;
+                } else {
+                    netReturnDisplay = `<span class="text-cyan-400 font-bold">${item.duration} hrs</span>`;
+                }
 
-                const subtextDesc = item.desc ? `<p class="text-[11px] text-slate-500 mt-0.5 italic max-w-xs md:max-w-md truncate">${item.desc}</p>` : '';
+                const secondaryNarrative = item.desc ? `<p class="text-[11px] text-slate-500 mt-1 font-sans italic max-w-xs md:max-w-lg truncate">${item.desc}</p>` : '';
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-900/50 transition-colors";
+                tr.className = "hover:bg-slate-900/40 transition-colors border-b border-slate-900/50";
                 tr.innerHTML = `
-                    <td class="py-3.5 font-medium text-slate-400">${item.date}</td>
-                    <td class="py-3.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">${item.category}</span></td>
-                    <td class="py-3.5">
-                        <span class="font-semibold text-slate-200 block">${item.topic}</span>
-                        ${subtextDesc}
+                    <td class="py-4 font-mono text-slate-400 text-[11px]">${item.date}</td>
+                    <td class="py-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-950 text-slate-400 border border-slate-800">${item.category}</span></td>
+                    <td class="py-4">
+                        <span class="font-bold text-slate-200 block tracking-wide">${item.topic}</span>
+                        ${secondaryNarrative}
                     </td>
-                    <td class="py-3.5 text-slate-400">${formatTo12Hour(item.start)} - ${formatTo12Hour(item.end)}</td>
-                    <td class="py-3.5 text-right font-mono">${yieldMetrics}</td>
+                    <td class="py-4 font-mono text-slate-400 text-[11px]">${item.start} - ${item.end}</td>
+                    <td class="py-4 text-right font-mono">${netReturnDisplay}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // 2. Statistical Computations & Visualization updates
-            const uniqueTimelineLabels = [...new Set(database.map(a => a.date))].sort((a, b) => new Date(a) - new Date(b)).slice(-7);
+            // Recompute Analytical Trends Window
+            const dynamicLabels = [...new Set(database.map(a => a.date))].sort((a, b) => new Date(a) - new Date(b)).slice(-7);
 
             if (currentMode === 'main') {
-                const dataSetRun = [];
-                const dataSetJava = [];
-                const dataSetAptitude = [];
+                const runArray = [], javaArray = [], aptArray = [];
 
-                uniqueTimelineLabels.forEach(date => {
-                    dataSetRun.push(database.filter(a => a.date === date && a.category === 'Run').reduce((s, c) => s + c.duration, 0));
-                    dataSetJava.push(database.filter(a => a.date === date && a.category === 'Java').reduce((s, c) => s + c.duration, 0));
-                    dataSetAptitude.push(database.filter(a => a.date === date && a.category === 'Aptitude').reduce((s, c) => s + c.duration, 0));
+                dynamicLabels.forEach(date => {
+                    runArray.push(database.filter(a => a.date === date && a.category === 'Run').reduce((s, c) => s + c.duration, 0));
+                    javaArray.push(database.filter(a => a.date === date && a.category === 'Java').reduce((s, c) => s + c.duration, 0));
+                    aptArray.push(database.filter(a => a.date === date && a.category === 'Aptitude').reduce((s, c) => s + c.duration, 0));
                 });
 
-                mainChart.data.labels = uniqueTimelineLabels;
-                mainChart.data.datasets[0].data = dataSetRun;
-                mainChart.data.datasets[1].data = dataSetJava;
-                mainChart.data.datasets[2].data = dataSetAptitude;
+                mainChart.data.labels = dynamicLabels;
+                mainChart.data.datasets[0].data = runArray;
+                mainChart.data.datasets[1].data = javaArray;
+                mainChart.data.datasets[2].data = aptArray;
                 mainChart.update();
             } else {
-                const dataSetViews = [];
-                uniqueTimelineLabels.forEach(date => {
-                    const dailyViews = database.filter(a => a.date === date && a.category === 'Reel').reduce((s, c) => s + parseInt(c.views || 0), 0);
-                    dataSetViews.push(dailyViews);
+                const viewsArray = [];
+                dynamicLabels.forEach(date => {
+                    viewsArray.push(database.filter(a => a.date === date && a.category === 'Reel').reduce((s, c) => s + parseInt(c.views || 0), 0));
                 });
 
-                reelsChart.data.labels = uniqueTimelineLabels;
-                reelsChart.data.datasets[0].data = dataSetViews;
+                reelsChart.data.labels = dynamicLabels;
+                reelsChart.data.datasets[0].data = viewsArray;
                 reelsChart.update();
             }
         }
 
-        // Processing Input Submissions
-        document.getElementById('activityForm').addEventListener('submit', function(e) {
+        // Processing Pipeline Form Submissions
+        document.getElementById('analyticsForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const date = document.getElementById('activityDate').value;
             const category = document.getElementById('activityCategory').value;
             const topic = document.getElementById('activityTopic').value;
-            const start = document.getElementById('startTime').value;
-            const end = document.getElementById('endTime').value;
             const desc = document.getElementById('activityDesc').value;
             const views = document.getElementById('reelViews').value || 0;
-            
-            const duration = computeHoursDelta(start, end);
 
-            if (duration <= 0) {
-                alert("Anomaly detected: Operational endpoint time must succeed sequence start time window.");
+            const startFormatted = extractTimeFromDropdowns('start');
+            const endFormatted = extractTimeFromDropdowns('end');
+            
+            const netDuration = calculateDeltaHours(startFormatted, endFormatted);
+
+            if (netDuration <= 0) {
+                alert("Analytics Error: Sequence Termination window must log chronologically after Sequence Start time.");
                 return;
             }
 
-            // Save record block
-            database.push({ date, category, topic, start, end, desc, duration, views: parseInt(views) });
+            database.push({ 
+                date, category, topic, desc, 
+                start: startFormatted, end: endFormatted, 
+                duration: netDuration, views: parseInt(views) 
+            });
+            
             refreshEngineUI();
 
-            // Sanitize interface forms
+            // Clear Dynamic values
             document.getElementById('activityTopic').value = '';
-            document.getElementById('startTime').value = '';
-            document.getElementById('endTime').value = '';
             document.getElementById('activityDesc').value = '';
             document.getElementById('reelViews').value = '';
         });
 
-        // Bootstrap operational lifecycle variables on launch
-        populateCategories();
+        // Engine System Boot Execution
+        buildTimeDropdownSelectors();
+        populateCategoryMatrix();
         toggleFormFields();
         refreshEngineUI();
     </script>
